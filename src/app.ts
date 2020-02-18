@@ -3,8 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 import requireTree from "require-tree";
 import bodyParser, { json, raw, text, urlencoded } from 'body-parser';
 var cors = require('cors');
-const xmlparser = require("express-xml-bodyparser")
-const cookieParser = require('cookie-parser')
+const { environment } = require('./env');
 
 // import Route from "./routes/userRoutes";
 
@@ -17,9 +16,15 @@ const runtime: any = {
         delete: {}
     }
 }
+// const operations:any ={
+//     opSchemas: {
+//         updateOne:{},
+//         updateMany: {},
+        
+//     }
+// }
 
 // const app = express();
-const { environment } = require('./env');
 
 export class App {
     app: any;
@@ -38,8 +43,6 @@ export class App {
 
         this.app.use(cors());
         this.app.use(json({ limit: '10mb' }));
-        this.app.use(raw());
-        this.app.use(cookieParser())
         this.app.use(urlencoded({ extended: true, limit: '10mb' }));
 
         runtime.routes = requireTree('./routes', {
@@ -63,9 +66,9 @@ export class App {
                     return functions.include(this.app);
             }
         });
-        
 
-        let checkUrl = (req,res,next)=>{
+
+        let checkUrl = (req, res, next) => {
             next()
         }
 
